@@ -12,11 +12,11 @@ LIBFTDIR = include/libft
 LIBFT = $(LIBFTDIR)/libft.a
 
 # Source files and object files
-SRCS = $(SRCDIR)/minishell.c
+SRCS = $(SRCDIR)/minish.c
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 
 # Output executable
-NAME = minishell
+NAME = minish
 
 # Colors for output
 GREEN		=	\033[0;32m
@@ -27,7 +27,7 @@ GRAY		=	\033[0;90m
 all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJS)
-	@echo "$(GRAY)building minishell..."
+	@echo "$(GRAY)building minish..."
 	@$(CC) $(CFLAGS) $(OBJS) -I$(INCDIR) $(LIBFT) -o $(NAME)
 	@echo "$(GREEN)$(NAME) has been created successfully"
 

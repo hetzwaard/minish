@@ -1,8 +1,8 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror 
-LIBS = -L$(LIBFTDIR) -lft
-INCLUDES = -Iinclude
+CFLAGS = -Wall -Wextra -Werror
+LIBS = -L$(LIBFTDIR) -lft -lreadline
+INCLUDES = -Iinclude 
 
 # Directories
 SRCDIR = src
@@ -13,6 +13,31 @@ LIBFT = $(LIBFTDIR)/libft.a
 
 # Source files and object files
 SRCS = $(SRCDIR)/minish.c
+SRCS += $(SRCDIR)/error/error.c
+SRCS += $(SRCDIR)/expansion/append_char.c
+SRCS += $(SRCDIR)/expansion/append_exit_code.c
+SRCS += $(SRCDIR)/expansion/append_variable.c
+SRCS += $(SRCDIR)/expansion/check_quotes.c
+SRCS += $(SRCDIR)/expansion/expansion.c
+SRCS += $(SRCDIR)/free/free_expansion.c
+SRCS += $(SRCDIR)/free/free_parsing.c
+SRCS += $(SRCDIR)/init/get_envp.c
+SRCS += $(SRCDIR)/init/get_pwd.c
+SRCS += $(SRCDIR)/init/init_banner.c
+SRCS += $(SRCDIR)/init/init_minish.c
+SRCS += $(SRCDIR)/init/init_parsing.c
+SRCS += $(SRCDIR)/init/init_signals.c
+SRCS += $(SRCDIR)/init/init_token.c
+SRCS += $(SRCDIR)/parser/add_command.c
+SRCS += $(SRCDIR)/parser/add_pipe.c
+SRCS += $(SRCDIR)/parser/add_redirect.c
+SRCS += $(SRCDIR)/parser/get_token_type.c
+SRCS += $(SRCDIR)/parser/get_token.c
+SRCS += $(SRCDIR)/parser/handle_heredoc.c
+SRCS += $(SRCDIR)/parser/open_file.c
+SRCS += $(SRCDIR)/parser/parser.c
+SRCS += $(SRCDIR)/parser/quotes.c
+SRCS += $(SRCDIR)/parser/skip_whitespaces.c
 OBJS = $(SRCS:%.c=$(OBJDIR)/%.o)
 
 # Output executable
@@ -28,7 +53,7 @@ all: $(LIBFT) $(NAME)
 
 $(NAME): $(OBJS)
 	@echo "$(GRAY)building minish..."
-	@$(CC) $(CFLAGS) $(OBJS) -I$(INCDIR) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJS) -I$(INCDIR) $(LIBFT) $(LIBS) -o $(NAME)
 	@echo "$(GREEN)$(NAME) has been created successfully"
 
 $(OBJDIR)/%.o: %.c

@@ -1,3 +1,0 @@
-[submodule "include/libft"]
-	path = include/libft
-	url = http://github.com/hetzwaard/libft.git

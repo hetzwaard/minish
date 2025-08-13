@@ -32,9 +32,9 @@ int	main(int ac, char **av, char **envp)
 		if (!shell->input[0] || shell->input[0] == '\n')
 			continue ;
 		init_input(shell);
-		if (check_syntax(shell->head, shell, NO_PARENTHESIS))
+		if (parser(shell->head, shell, NO_PARENTHESIS))
 			continue ;
-		shell->tree = create_tree(*shell->head, (*shell->head)->prev->prev);
+		shell->tree = tree_create(*shell->head, (*shell->head)->prev->prev);
 		exec_tree(shell->tree, shell);
 	}
 	ft_printf("exit\n");

@@ -135,12 +135,23 @@ typedef enum e_tree_type
 t_shell				*init_shell(t_shell *shell, char **av, int ac, char **envp);
 void				init_input(t_shell *gen);
 
+// parser
+t_cdll				**lexer_tokenize(char *input);
+int					parser(t_cdll **head, t_shell *shell, int state);
+
+t_tree				*tree_create(t_cdll *left, t_cdll *right);
 // error
-int					ft_error_msg(char *cmd, char *msg);
+int					error_parenthesis(void);
+int					error_perror(char *cmd, char *msg);
+int					error_shell(char *cmd, char *msg);
+int					error_token(t_token *token);
 
 // free
-void				exit_shell(t_shell *shell);
+void				free_cmd_line(t_shell *shell);
+void				free_delim(t_delim *delim);
 void				free_shell(t_shell *shell);
+void				free_strings(t_shell *shell);
+void				free_tree(t_tree *root);
 
 // env
 size_t				get_env_count(char **envp);
@@ -167,5 +178,31 @@ void				cdll_move_node(t_cdll **src, t_cdll **dst, t_cdll *node);
 int					cdll_get_node_index(t_cdll *head, t_cdll *node);
 t_cdll				*cdll_get_node_at(t_cdll *head, int position);
 int					cdll_get_node_count(t_cdll *head);
+
+// token
+int					is_logical_operator(t_cdll *node);
+int					is_parenthesis(t_cdll *node);
+int					is_eof(t_cdll *node);
+int					is_pipe(t_cdll *node);
+int					is_tree_branch(t_cdll *node);
+int					is_space(t_cdll *node);
+int					is_filename(t_cdll *node);
+int					is_and_or(t_cdll *node);
+int					is_semicolon(t_cdll *node);
+int					is_text(t_cdll *node);
+int					is_redir(t_cdll *node);
+int					is_heredoc(t_cdll *node);
+int					is_redir_in(t_cdll *node);
+int					is_redir_out(t_cdll *node);
+
+int					parse_token(char **ps, char *es, char **q, char **eq);
+int					parse_pipe(char **s);
+int					parse_ampersand(char **s, char *es);
+int					parse_semicolon(char **s);
+int					parse_double_quote(char **s, char *es);
+int					parse_single_quote(char **s, char *es);
+
+// utils
+void				exit_shell(t_shell *shell);
 
 #endif

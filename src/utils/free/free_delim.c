@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   free_strings.c                                     :+:    :+:            */
+/*   free_delim.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/08/09 02:56:59 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/09 02:57:07 by mahkilic      ########   odam.nl         */
+/*   Created: 2025/08/09 02:56:19 by mahkilic      #+#    #+#                 */
+/*   Updated: 2025/08/09 02:56:28 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
-void	free_strings(t_shell *shell)
+void	free_delim(t_delim *delim)
 {
-	t_cdll	*current;
-	t_token	*token;
-
-	current = *shell->head;
-	while (1)
-	{
-		token = (t_token *) current->data;
-		if (token->str_is_malloc)
-		{
-			free(token->start);
-			token->start = NULL;
-			token->str_is_malloc = 0;
-		}
-		current = current->next;
-		if (current == *shell->head)
-			break ;
-	}
+	if (!delim)
+		return ;
+	if (delim->str)
+		free(delim->str);
+	free(delim);
 }

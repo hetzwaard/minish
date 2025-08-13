@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   exit_shell.c                                       :+:    :+:            */
+/*   free_tree.c                                        :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
+/*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/08/08 22:26:46 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/08 22:26:46 by mahkilic      ########   odam.nl         */
+/*   Created: 2025/08/09 02:56:40 by mahkilic      #+#    #+#                 */
+/*   Updated: 2025/08/09 02:56:53 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
-void	exit_shell(t_shell *shell)
+void	free_tree(t_tree *root)
 {
-	rl_clear_history();
-	unlink(TEMP_FILE);
-	free_shell(shell);
+	if (!root)
+		return ;
+	if (root->left)
+		free_tree(root->left);
+	if (root->right)
+		free_tree(root->right);
+	free(root);
+	root = NULL;
 }

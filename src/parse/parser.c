@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 23:55:21 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/08 23:55:21 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 10:20:37 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	append_input(t_shell *shell, t_cdll *node)
 
 	if (!shell || !shell->input_cpy || !node)
 		return (error_shell("append_input", "invalid arguments"));
-	line = readline(CYAN "> " RESET);
+	line = readline(RED "> " RESET);
 	if (!line || !line[0] || line[0] == '\n')
 		return (error_token((t_token *) node->next->data));
 	join = ft_strjoin(shell->input_cpy, line);
@@ -64,7 +64,7 @@ static int	validate_parenthesis(t_shell *shell, t_cdll *node)
 	return (result);
 }
 
-static int	validate_last_token(t_cdll *node, t_cdll *shell, int state)
+static int	validate_last_token(t_cdll *node, t_shell *shell, int state)
 {
 	if (is_redir(node->prev))
 		return (error_token((t_token *) node->data));
@@ -77,7 +77,7 @@ static int	validate_last_token(t_cdll *node, t_cdll *shell, int state)
 	return (0);
 }
 
-int	validate_nodes(t_cdll *current, t_cdll *shell, int state)
+int	validate_nodes(t_cdll *current, t_shell *shell, int state)
 {
 	while (1)
 	{

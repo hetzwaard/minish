@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   error_shell.c                                      :+:    :+:            */
+/*   error_execve.c                                     :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
+/*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/08/08 20:26:59 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 08:41:19 by mahkilic      ########   odam.nl         */
+/*   Created: 2025/08/14 09:42:45 by mahkilic      #+#    #+#                 */
+/*   Updated: 2025/08/14 09:42:54 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	error_shell(char *cmd, char *msg)
+void	error_execve(char *cmd)
 {
-	ft_putstr_fd("minishell: ", 2);
 	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (-1);
+	ft_putstr_fd(": command not found\n", 2);
 }

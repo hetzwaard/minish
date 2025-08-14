@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 20:33:39 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/08 20:33:39 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 08:42:53 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	env_update(const char *key, char sep, const char *value, char ***envp)
 
 	if (!envp || !key)
 		return (error_shell("env_update", "invalid arguments"));
-	var = find_env(key, *envp);
+	var = get_env_var_ptr(key, *envp);
 	if (!var)
 		return (env_create(key, sep, value, envp));
 	temp = ft_strjoin(key, "=");

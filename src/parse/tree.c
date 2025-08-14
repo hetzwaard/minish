@@ -6,13 +6,13 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/13 21:03:05 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/13 21:03:05 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 05:39:08 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static int	tree_node_type(t_token *token)
+static int	find_node_type(t_token *token)
 {
 	if (token->type == TOKEN_PIPE)
 		return (TREE_PIPE);
@@ -28,20 +28,20 @@ static int	tree_node_type(t_token *token)
 		return (TREE_COMMAND);
 }
 
-static t_tree	*tree_create_node(t_cdll *list_node)
+static t_tree	*create_tree_node(t_cdll *list_node)
 {
 	t_tree	*tree_node;
 
 	tree_node = (t_tree *) malloc(sizeof(t_tree));
 	if (!tree_node)
-		return (error_shell("tree_create_node", "malloc failed"), NULL);
+		return (error_shell("create_tree_node", "malloc failed"), NULL);
 	ft_memset(tree_node, 0, sizeof(t_tree));
 	tree_node->list_node = list_node;
-	tree_node->type = tree_node_type((t_token *) list_node->data);
+	tree_node->type = find_node_type((t_token *) list_node->data);
 	return (tree_node);
 }
 
-static t_cdll	*tree_find_lowest_priority(t_cdll *left, t_cdll *right)
+static t_cdll	*find_lowest_priority(t_cdll *left, t_cdll *right)
 {
 	t_cdll	*current;
 	t_cdll	*lowest;
@@ -49,7 +49,7 @@ static t_cdll	*tree_find_lowest_priority(t_cdll *left, t_cdll *right)
 	t_token	*lowest_token;
 
 	if (!left || !right)
-		return (error_shell("tree_find_lowest_priority",
+		return (error_shell("find_lowest_priority",
 				"invalid arguments"), NULL);
 	current = right;
 	lowest = left;
@@ -66,23 +66,23 @@ static t_cdll	*tree_find_lowest_priority(t_cdll *left, t_cdll *right)
 	return (lowest);
 }
 
-t_tree	*tree_create(t_cdll *left, t_cdll *right)
+t_tree	*create_tree(t_cdll *left, t_cdll *right)
 {
 	t_tree	*tree_node;
 	t_cdll	*lowest;
 
 	if (!left || !right)
 		return (error_shell("create tree", "invalid arguments"), NULL);
-	lowest = tree_find_lowest_priority(left, right);
-	tree_node = tree_create_node(lowest);
+	lowest = find_lowest_priority(left, right);
+	tree_node = create_tree_node(lowest);
 	if (!tree_node)
 		return (NULL);
 	if (is_tree_branch(lowest))
 	{
 		if (lowest != left)
-			tree_node->left = tree_create(left, lowest->prev);
+			tree_node->left = create_tree(left, lowest->prev);
 		if (lowest != right)
-			tree_node->right = tree_create(lowest->next, right);
+			tree_node->right = create_tree(lowest->next, right);
 	}
 	return (tree_node);
 }

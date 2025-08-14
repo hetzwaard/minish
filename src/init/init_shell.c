@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 19:49:32 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/08 19:49:32 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 10:16:08 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	init_input(t_shell *gen)
 	gen->in_start = gen->input;
 	gen->in_end = gen->input + ft_strlen(gen->input);
 	gen->input_cpy = ft_strdup(gen->input);
-	gen->head = tokenize(gen->input);
+	gen->head = lexer_tokenize(gen->input);
 }
 
 static void	init_home(t_shell *shell)
@@ -37,9 +37,9 @@ static void	init_home(t_shell *shell)
 
 static void	init_pwd(t_shell *shell)
 {
-	char	pwd(PATH_MAX);
+	char	pwd[PATH_MAX];
 
-	unset_one_env_var("OLDPWD", &shell->envp);
+	unset_var("OLDPWD", &shell->envp);
 	if (!getcwd(pwd, sizeof(pwd)))
 		error_shell("init_pwd", "getcwd failed");
 	shell->pwd = ft_strdup(pwd);
@@ -51,7 +51,7 @@ static void	init_pwd(t_shell *shell)
 	}
 }
 
-static int	init_shlvl(char **envp)
+static int	init_shlvl(char ***envp)
 {
 	char	*shlvl;
 	char	*new_shlvl;
@@ -65,12 +65,12 @@ static int	init_shlvl(char **envp)
 	new_shlvl = ft_itoa(i + 1);
 	if (!new_shlvl)
 		return (error_shell("change_shlvl", "ft_itoa failed"));
-	update_env_var("SHLVL", '=', new_shlvl, envp);
+	env_update("SHLVL", '=', new_shlvl, envp);
 	free(new_shlvl);
 	return (0);
 }
 
-t_shell	*init_shell(t_shell *shell, char **av, int ac, char **envp)
+t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp)
 {
 	(void)ac;
 	(void)av;
@@ -81,7 +81,7 @@ t_shell	*init_shell(t_shell *shell, char **av, int ac, char **envp)
 		exit (1);
 	}
 	ft_memset(shell, 0, sizeof(t_shell));
-	shell->envp = copy_env(envp);
+	shell->envp = env_copy(envp);
 	if (!shell->envp)
 	{
 		error_shell("init_shell", "failed to copy envp");

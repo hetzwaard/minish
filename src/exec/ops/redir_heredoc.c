@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   error_shell.c                                      :+:    :+:            */
+/*   redir_heredoc.c                                    :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
+/*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/08/08 20:26:59 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 08:41:19 by mahkilic      ########   odam.nl         */
+/*   Created: 2025/08/14 06:58:49 by mahkilic      #+#    #+#                 */
+/*   Updated: 2025/08/14 06:59:00 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	error_shell(char *cmd, char *msg)
+int	redir_heredoc(void)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (-1);
+	int	fd;
+
+	fd = open(TEMP_FILE, O_RDONLY);
+	if (fd == -1)
+		return (error_perror("redir_heredoc", "open failed"));
+	if (dup2(fd, STDIN_FILENO) == -1)
+		return (close(fd), error_perror("redir_heredoc", "dup2 failed"));
+	close(fd);
+	return (0);
 }

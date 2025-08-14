@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/13 20:56:16 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/13 20:56:16 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 09:53:59 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,15 +87,15 @@ static int	parse_symbol(char **s, char *es)
 	else if (**s == '(' || **s == ')')
 		ret = parse_parenthesis(s, es);
 	else if (**s == ';')
-		ret = get_semi_colon(s);
+		ret = parse_semicolon(s);
 	else if (**s == '|')
-		ret = get_vertical_bar(s);
+		ret = parse_pipe(s);
 	else if (**s == '&')
-		ret = get_amperstand(s, es);
+		ret = parse_ampersand(s, es);
 	else if (**s == '"')
-		ret = double_quote(s, es);
+		ret = parse_double_quote(s, es);
 	else if (**s == '\'')
-		ret = get_single_quote(s, es);
+		ret = parse_single_quote(s, es);
 	return (ret);
 }
 

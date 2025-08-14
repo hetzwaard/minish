@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   error_shell.c                                      :+:    :+:            */
+/*   pwd.c                                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
+/*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/08/08 20:26:59 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 08:41:19 by mahkilic      ########   odam.nl         */
+/*   Created: 2025/08/14 08:49:49 by mahkilic      #+#    #+#                 */
+/*   Updated: 2025/08/14 10:29:35 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	error_shell(char *cmd, char *msg)
+int	pwd_cmd(char **args, char **envp)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (-1);
+	char	current_dir[PATH_MAX];
+
+	(void)args;
+	(void)envp;
+	if (!getcwd(current_dir, sizeof(current_dir)))
+		return (error_shell("pwd", "getcwd failed"));
+	else
+		ft_printf("%s\n", current_dir);
+	return (0);
 }

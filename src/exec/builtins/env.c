@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   error_shell.c                                      :+:    :+:            */
+/*   env.c                                              :+:    :+:            */
 /*                                                     +:+                    */
-/*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
+/*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2025/08/08 20:26:59 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 08:41:19 by mahkilic      ########   odam.nl         */
+/*   Created: 2025/08/14 08:49:38 by mahkilic      #+#    #+#                 */
+/*   Updated: 2025/08/14 10:29:26 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-int	error_shell(char *cmd, char *msg)
+int	env_cmd(char **args, char **envp)
 {
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(msg, 2);
-	ft_putstr_fd("\n", 2);
-	return (-1);
+	int	i;
+
+	(void)args;
+	if (!envp)
+		return (error_shell("env_cmd", "invalid arguments"));
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		if (ft_strchr(envp[i], '='))
+		{
+			ft_putstr_fd(envp[i], 1);
+			ft_putchar_fd('\n', 1);
+		}
+		i++;
+	}
+	return (0);
 }

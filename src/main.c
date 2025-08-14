@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 19:36:20 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/08 19:36:20 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 10:21:22 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		init_signals();
 		free_cmd_line(shell);
-		shell->input = readline(CYAN "MINISHELL > " RESET);
+		shell->input = readline(CLOVER "🍀 MINISH > " RESET);
 		if (!shell->input)
 			break ;
 		if (shell->input && shell->input[0] == '\n' && shell->input[0] != '\0')
@@ -34,7 +34,7 @@ int	main(int ac, char **av, char **envp)
 		init_input(shell);
 		if (parser(shell->head, shell, NO_PARENTHESIS))
 			continue ;
-		shell->tree = tree_create(*shell->head, (*shell->head)->prev->prev);
+		shell->tree = create_tree(*shell->head, (*shell->head)->prev->prev);
 		exec_tree(shell->tree, shell);
 	}
 	ft_printf("exit\n");

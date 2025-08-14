@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 18:32:20 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 10:59:25 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 11:33:57 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,7 @@ int		unset_cmd(char **args, char ***envp);
 int		unset_var(char *key, char ***envp);
 
 // init
+void	init_banner(void);
 int		init_heredoc(t_cdll *node, t_shell *shell);
 t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp);
 void	init_signals(void);
@@ -248,6 +249,7 @@ int		tt_is_match(char *pattern, char *filename);
 // utils
 char	**realloc_str_arr(char **tab, size_t new_size);
 char	*cut_var_name(char *str);
+char	*prompt(struct s_shell *shell);
 void	exit_shell(t_shell *shell);
 int		is_valid_var_name(char *str);
 

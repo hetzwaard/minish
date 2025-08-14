@@ -14,7 +14,7 @@
 
 void	error_warning(char *delimiter, int n_line)
 {
-	ft_putstr_fd("minishell: warning : here-document at line ", 2);
+	ft_putstr_fd("minish: warning : here-document at line ", 2);
 	ft_putnbr_fd(n_line, 2);
 	ft_putstr_fd(" delimited by end-of-file (wanted `", 2);
 	ft_putstr_fd(delimiter, 2);

@@ -14,7 +14,7 @@
 
 int	error_shell(char *cmd, char *msg)
 {
-	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("minish: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(msg, 2);

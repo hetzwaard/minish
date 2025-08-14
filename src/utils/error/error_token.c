@@ -40,7 +40,7 @@ static void	print_token(t_token *token)
 
 int	error_token(t_token *token)
 {
-	ft_putstr_fd("minishell: syntax error near unexpected token ", 2);
+	ft_putstr_fd("minish: syntax error near unexpected token ", 2);
 	print_token(token);
 	ft_printf("\n");
 	return (258);

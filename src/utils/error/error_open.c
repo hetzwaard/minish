@@ -14,7 +14,7 @@
 
 int	error_open(char *filename)
 {
-	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd("minish: ", 2);
 	perror(filename);
 	free(filename);
 	return (-1);

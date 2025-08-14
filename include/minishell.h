@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 18:32:20 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 11:33:57 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/14 14:12:05 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # define C "\033[1;36m"
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
+# define ORANGE "\033[38;5;214m"
 # define CLOVER "\033[38;2;120;200;80m"
 
 // global variable

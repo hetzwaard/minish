@@ -14,7 +14,9 @@
 
 char	*prompt(t_shell *shell)
 {
-	static int	flag = 0;
+	static int	flag;
+
+	flag = 0;
 	if (!flag)
 	{
 		ft_printf(CLOVER "\n"

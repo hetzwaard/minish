@@ -18,7 +18,6 @@ int	main(int ac, char **av, char **envp)
 {
 	t_shell	*shell;
 
-	init_banner();
 	shell = NULL;
 	shell = init_shell(shell, ac, av, envp);
 	while (g_signals != EOF)

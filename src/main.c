@@ -27,7 +27,7 @@ int	main(int ac, char **av, char **envp)
 		shell->input = readline(prompt(shell));
 		if (!shell->input)
 			break ;
-		if (shell->input && shell->input[0] == '\n' && shell->input[0] != '\0')
+		if (shell->input[0] && shell->input[0] != '\n')
 			add_history(shell->input);
 		if (!shell->input[0] || shell->input[0] == '\n')
 			continue ;

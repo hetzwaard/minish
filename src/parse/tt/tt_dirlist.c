@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 static void	tt_dirlist_copy(char **file_array, DIR *dir, size_t len, int mode)
 {

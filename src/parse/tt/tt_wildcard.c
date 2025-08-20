@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
 static t_cdll	*tt_wildcard_insert_node(t_token *token, t_cdll *anchor)
 {

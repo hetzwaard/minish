@@ -87,6 +87,8 @@ static char	*tt_replace_loop(char *res, char *ptr, char *str, t_shell *shell)
 		else
 			res = tt_replace_var(str, ptr, shell->envp);
 		free(str);
+		if (ft_strchr(res, '$'))
+			return (res);
 		if (!res)
 			return (NULL);
 	}

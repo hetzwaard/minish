@@ -16,9 +16,15 @@ int	env_cmd(char **args, char **envp)
 {
 	int	i;
 
-	(void)args;
 	if (!envp)
 		return (error_shell("env_cmd", "invalid arguments"));
+	if (args && args[1])
+	{
+		ft_putstr_fd("env: '", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putstr_fd("': No such file or directory\n", 2);
+		return (127);
+	}
 	i = 0;
 	while (envp[i] != NULL)
 	{

@@ -17,19 +17,25 @@ static char	*cd_get_pwd(void)
 	char	pwd[PATH_MAX];
 
 	if (!getcwd(pwd, sizeof(pwd)))
-		return (error_shell("cd", "getcwd failed"), NULL);
+		return (NULL);
 	return (ft_strdup(pwd));
 }
 
 static void	cd_update_env(char *old, char ***envp, t_shell *shell, char *pwd)
 {
+	char	*current_pwd;
+
 	if (env_update("OLDPWD", '=', old, envp) == -1)
 		error_shell("cd", "failed to create OLDPWD");
 	if (env_update("PWD", '=', pwd, envp) == -1)
 		error_shell("cd", "failed to create PWD");
 	if (shell->pwd)
 		free(shell->pwd);
-	shell->pwd = cd_get_pwd();
+	current_pwd = cd_get_pwd();
+	if (current_pwd)
+		shell->pwd = current_pwd;
+	else
+		shell->pwd = ft_strdup(pwd);
 }
 
 static char	*cd_get_path(char *input, char **envp, char *home, char *old)

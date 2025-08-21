@@ -24,6 +24,28 @@ static void	exec_restore_std(int stdin, int stdout)
 	close(stdout);
 }
 
+static int	exec_redir(t_cdll *node, t_shell *shell)
+{
+	t_cdll	*current;
+	int		redir_status;
+
+	current = cdll_next_redir(node);
+	while (current)
+	{
+		redir_status = 0;
+		if (((t_token *)current->data)->type == TOKEN_HEREDOC)
+			redir_status = redir_heredoc();
+		else if (((t_token *)current->data)->type == TOKEN_REDIR_IN)
+			redir_status = redir_in(current, shell);
+		else if (is_redir_out(current))
+			redir_status = redir_out(current, shell);
+		if (redir_status != 0)
+			return (1);
+		current = cdll_next_redir(current->next);
+	}
+	return (0);
+}
+
 static int	exec_save_std(t_shell *shell)
 {
 	shell->stdin_backup = dup(STDIN_FILENO);
@@ -31,36 +53,22 @@ static int	exec_save_std(t_shell *shell)
 		return (error_perror("exec_save_std", "dup failed"));
 	shell->stdout_backup = dup(STDOUT_FILENO);
 	if (shell->stdout_backup == -1)
-		return (close(shell->stdin_backup),
-			error_perror("exec_save_std", "dup failed"));
+		return (close(shell->stdin_backup), error_perror("exec_save_std",
+				"dup failed"));
 	return (0);
 }
 
 int	exec_leaf(t_cdll *node, t_shell *shell)
 {
-	t_cdll	*current;
-	int		status;
+	int	status;
 
 	if (exec_save_std(shell) == -1)
 		return (-1);
 	if (!shell->in_pipe)
 		init_heredoc(node, shell);
-	status = 0;
-	current = cdll_next_redir(node);
-	while (current)
-	{
-		if (((t_token *) current->data)->type == TOKEN_HEREDOC)
-			status += redir_heredoc();
-		else if (((t_token *) current->data)->type == TOKEN_REDIR_IN)
-			status += redir_in(current, shell);
-		else if (is_redir_out(current))
-			status += redir_out(current, shell);
-		current = cdll_next_redir(current->next);
-	}
-	if (status)
+	if (exec_redir(node, shell))
 		return (1);
-	current = cdll_next_cmd(node);
-	status = exec_cmd(current, shell);
+	status = exec_cmd(cdll_next_cmd(node), shell);
 	exec_restore_std(shell->stdin_backup, shell->stdout_backup);
 	return (status);
 }

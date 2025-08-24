@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 08:33:04 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 10:31:59 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/24 12:28:22 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,21 @@ static int	pipex_close(int fd[2], int left_pid, int right_pid, t_shell *shell)
 	close(fd[1]);
 	close(fd[0]);
 	if (waitpid(left_pid, &left_status, 0) == -1)
-		error_perror("pipex_close", "left waitpid failed");
+	{
+		if (errno != ECHILD)
+			error_perror("pipex_close", "left waitpid failed");
+	}
 	if (waitpid(right_pid, &right_status, 0) == -1)
-		error_perror("pipex_close", "right waitpid failed");
+	{
+		if (errno != ECHILD)
+			error_perror("pipex_close", "right waitpid failed");
+		return (0);
+	}
 	if (WIFSIGNALED(right_status))
 		return (128 + WTERMSIG(right_status));
 	if (WIFEXITED(right_status))
 		return (WEXITSTATUS(right_status));
-	return (-1);
+	return (1);
 }
 
 int	pipex(t_tree *tree, t_shell *shell)

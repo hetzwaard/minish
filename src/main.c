@@ -14,12 +14,12 @@
 
 int	g_signals;
 
-int	main(int ac, char **av, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
 	t_shell	*shell;
 
 	shell = NULL;
-	shell = init_shell(shell, ac, av, envp);
+	shell = init_shell(shell, argc, argv, envp);
 	while (g_signals != EOF)
 	{
 		init_signals();

@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 19:36:20 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/24 12:32:54 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/30 12:28:45 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,15 @@ int	main(int argc, char **argv, char **envp)
 
 	shell = NULL;
 	shell = init_shell(shell, argc, argv, envp);
-	while (g_signals != EOF)
+	while (1)
 	{
-		init_signals();
+		sig_setup();
 		free_cmd_line(shell);
 		shell->input = readline(prompt(shell));
 		if (!shell->input)
 			break ;
-		if (shell->input[0] && shell->input[0] != '\n')
+		if (shell->input[0])
 			add_history(shell->input);
-		if (!shell->input[0] || shell->input[0] == '\n')
-			continue ;
 		init_input(shell);
 		if (parser(shell->head, shell, NO_PARENTHESIS))
 			continue ;

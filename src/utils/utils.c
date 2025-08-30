@@ -27,7 +27,7 @@ char	*prompt(t_shell *shell)
 			"╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚═╝╚══════╝╚═╝  ╚═╝\n" RESET "\n");
 		flag = 1;
 	}
-	if (shell->exit_status != 0)
+	if (shell->exit_status != 0 && shell->exit_status != 130)
 		return (ORANGE "☘️  MINISH " RED ">" RESET " ");
 	return (CLOVER "🍀 MINISH > " RESET);
 }

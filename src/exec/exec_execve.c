@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 09:40:23 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 09:43:28 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/30 12:58:10 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static char	*exec_find_exec_pathj(char *cmd, char **envp)
 
 static void	exec_child_proc(char *path, char **args, t_shell *shell)
 {
+	sig_child();
 	close(shell->stdin_backup);
 	close(shell->stdout_backup);
 	if (execve(path, args, shell->envp) == -1)
@@ -66,24 +67,13 @@ static void	exec_child_proc(char *path, char **args, t_shell *shell)
 static int	exec_execve_cmd(char *path, char **args, t_shell *shell)
 {
 	pid_t	pid;
-	int		status;
 
-	status = -1;
 	pid = fork();
 	if (pid == -1)
 		return (error_perror(path, "fork failed"), -1);
 	if (pid == 0)
 		exec_child_proc(path, args, shell);
-	else
-	{
-		if (waitpid(pid, &status, 0) == -1)
-			return (error_perror(path, "waitpid failed"), status);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		if (WIFSIGNALED(status))
-			return (128 + WTERMSIG(status));
-	}
-	return (status);
+	return (sig_execve(pid, path));
 }
 
 int	exec_execve(char *cmd, char **args, char **envp, t_shell *shell)

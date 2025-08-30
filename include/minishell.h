@@ -38,6 +38,14 @@
 # define IN_PARENTHESIS 1
 # define TEMP_FILE "/tmp/minishell_heredoc.tmp"
 
+// signal mode defines
+# define _POSIX_C_SOURCE 200809L
+# define MAIN 1
+# define HEREDOC 2
+# define CHILD 3
+# define PARENT 4
+# define IGNORE 5
+
 // color definitions
 # define Y "\033[1;33m"
 # define G "\033[1;32m"
@@ -76,10 +84,10 @@ typedef struct s_cdll
 
 typedef struct s_tree
 {
-	int						type;
-	t_cdll					*list_node;
-	struct s_tree			*left;
-	struct s_tree			*right;
+	int					type;
+	t_cdll				*list_node;
+	struct s_tree		*left;
+	struct s_tree		*right;
 }		t_tree;
 
 typedef struct s_shell
@@ -144,9 +152,17 @@ int		unset_var(char *key, char ***envp);
 void	init_banner(void);
 int		init_heredoc(t_cdll *node, t_shell *shell);
 t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp);
-void	init_signals(void);
-void	heredoc_signals(void);
 void	init_input(t_shell *gen);
+
+// signals
+void	sig_set_signal(int mode);
+void	sig_heredoc(void);
+void	sig_setup(void);
+void	sigint_prompt(int signum);
+void	sigint_heredoc(int signum);
+int		sig_pipex(int left_pid, int right_pid);
+void	sig_child(void);
+int		sig_execve(pid_t pid, char *ctx);
 
 // parser
 t_cdll	**lexer_tokenize(char *input);
@@ -212,46 +228,5 @@ int		redir_out(t_cdll *node, t_shell *shell);
 char	**exec_args(t_cdll *node, t_shell *shell);
 char	*exec_filename(t_cdll *node, t_shell *shell);
 int		exec_cmd(t_cdll *node, t_shell *shell);
-int		exec_execve(char *cmd, char **args, char **envp, t_shell *shell);
-int		exec_leaf(t_cdll *node, t_shell *shell);
-int		exec_tree(t_tree *tree_node, t_shell *shell);
-
-// token
-int		is_logical_operator(t_cdll *node);
-int		is_parenthesis(t_cdll *node);
-int		is_eof(t_cdll *node);
-int		is_pipe(t_cdll *node);
-int		is_tree_branch(t_cdll *node);
-int		is_space(t_cdll *node);
-int		is_filename(t_cdll *node);
-int		is_and_or(t_cdll *node);
-int		is_semicolon(t_cdll *node);
-int		is_text(t_cdll *node);
-int		is_redir(t_cdll *node);
-int		is_heredoc(t_cdll *node);
-int		is_redir_in(t_cdll *node);
-int		is_redir_out(t_cdll *node);
-
-int		parse_token(char **ps, char *es, char **q, char **eq);
-int		parse_pipe(char **s);
-int		parse_ampersand(char **s, char *es);
-int		parse_semicolon(char **s);
-int		parse_double_quote(char **s, char *es);
-int		parse_single_quote(char **s, char *es);
-
-// text transformer
-char	**tt_dirlist(char *path, int mode);
-char	**tt_filenames(char *arg, char **file_array);
-char	*tt_dollar(t_token *token, t_shell *shell);
-char	*tt_expand(char *str, t_shell *shell);
-char	*tt_wildcard(char *arg, t_cdll *node, t_shell *shell);
-int		tt_is_match(char *pattern, char *filename);
-
-// utils
-char	**realloc_str_arr(char **tab, size_t new_size);
-char	*cut_var_name(char *str);
-char	*prompt(struct s_shell *shell);
-void	exit_shell(t_shell *shell);
-int		is_valid_var_name(char *str);
 
 #endif

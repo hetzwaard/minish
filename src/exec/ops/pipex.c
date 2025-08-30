@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 08:33:04 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/24 12:35:16 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/30 12:40:00 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static int	pipex_write(int fd[], t_tree *tree, t_shell *shell)
 {
 	int	status;
 
+	sig_child();
 	close(fd[0]);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
@@ -34,6 +35,7 @@ static int	pipex_read(int fd[], t_tree *tree, t_shell *shell)
 {
 	int	status;
 
+	sig_child();
 	close(fd[1]);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
@@ -68,28 +70,13 @@ static int	pipex_heredoc(t_tree *tree, t_shell *shell)
 
 static int	pipex_close(int fd[2], int left_pid, int right_pid, t_shell *shell)
 {
-	int		left_status;
-	int		right_status;
+	int	status;
 
 	shell->in_pipe = 0;
 	close(fd[1]);
 	close(fd[0]);
-	if (waitpid(left_pid, &left_status, 0) == -1)
-	{
-		if (errno != ECHILD)
-			error_perror("pipex_close", "left waitpid failed");
-	}
-	if (waitpid(right_pid, &right_status, 0) == -1)
-	{
-		if (errno != ECHILD)
-			error_perror("pipex_close", "right waitpid failed");
-		return (0);
-	}
-	if (WIFSIGNALED(right_status))
-		return (128 + WTERMSIG(right_status));
-	if (WIFEXITED(right_status))
-		return (WEXITSTATUS(right_status));
-	return (1);
+	status = sig_pipex(left_pid, right_pid);
+	return (status);
 }
 
 int	pipex(t_tree *tree, t_shell *shell)

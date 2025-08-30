@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 06:04:16 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 10:20:54 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/08/30 12:23:55 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ static t_delim	*heredoc_find_delimiter(t_cdll *node)
 
 static void	heredoc_child(t_cdll *node, t_shell *shell)
 {
-	t_cdll	*current;
-	t_delim	*delimiter;
+	t_cdll		*current;
+	t_delim		*delimiter;
 
-	heredoc_signals();
+	sig_set_signal(HEREDOC);
 	current = cdll_next_heredoc(node);
 	while (1)
 	{
@@ -115,16 +115,29 @@ static void	heredoc_child(t_cdll *node, t_shell *shell)
 
 int	init_heredoc(t_cdll *node, t_shell *shell)
 {
-	int		pid;
+	int	pid;
+	int	status;
 
 	pid = fork();
 	if (pid == -1)
 		return (error_perror("init_heredoc", "fork failed"));
 	if (pid == 0)
 		heredoc_child(node, shell);
-	if (waitpid(pid, NULL, 0) == -1)
+	sig_set_signal(PARENT);
+	if (waitpid(pid, &status, 0) == -1)
+	{
+		if (errno == EINTR)
+		{
+			sig_set_signal(MAIN);
+			return (130);
+		}
+		sig_set_signal(MAIN);
 		return (error_perror("init_heredoc", "waitpid failed"));
-	if (WIFEXITED(pid) && WEXITSTATUS(pid) == -1)
+	}
+	sig_set_signal(MAIN);
+	if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	if (WIFEXITED(status) && WEXITSTATUS(status) == -1)
 		return (-1);
 	return (0);
 }

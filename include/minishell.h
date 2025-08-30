@@ -149,26 +149,55 @@ int		unset_cmd(char **args, char ***envp);
 int		unset_var(char *key, char ***envp);
 
 // init
-void	init_banner(void);
+void	init_input(t_shell *gen);
 int		init_heredoc(t_cdll *node, t_shell *shell);
 t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp);
-void	init_input(t_shell *gen);
 
 // signals
+void	sigint_prompt(int signum);
+void	sigint_heredoc(int signum);
 void	sig_set_signal(int mode);
 void	sig_heredoc(void);
 void	sig_setup(void);
-void	sigint_prompt(int signum);
-void	sigint_heredoc(int signum);
 int		sig_pipex(int left_pid, int right_pid);
 void	sig_child(void);
 int		sig_execve(pid_t pid, char *ctx);
 
 // parser
 t_cdll	**lexer_tokenize(char *input);
-int		parser(t_cdll **head, t_shell *shell, int state);
-
 t_tree	*create_tree(t_cdll *left, t_cdll *right);
+
+int		parser(t_cdll **head, t_shell *shell, int state);
+int		parse_token(char **ps, char *es, char **q, char **eq);
+int		parse_pipe(char **s);
+int		parse_ampersand(char **s, char *es);
+int		parse_semicolon(char **s);
+int		parse_double_quote(char **s, char *es);
+int		parse_single_quote(char **s, char *es);
+
+// token
+int		is_logical_operator(t_cdll *node);
+int		is_parenthesis(t_cdll *node);
+int		is_eof(t_cdll *node);
+int		is_pipe(t_cdll *node);
+int		is_tree_branch(t_cdll *node);
+int		is_space(t_cdll *node);
+int		is_filename(t_cdll *node);
+int		is_and_or(t_cdll *node);
+int		is_semicolon(t_cdll *node);
+int		is_text(t_cdll *node);
+int		is_redir(t_cdll *node);
+int		is_heredoc(t_cdll *node);
+int		is_redir_in(t_cdll *node);
+int		is_redir_out(t_cdll *node);
+
+// tt
+char	**tt_dirlist(char *path, int mode);
+char	*tt_expand(char *str, t_shell *shell);
+char	*tt_dollar(t_token *token, t_shell *shell);
+char	**tt_filenames(char *arg, char **file_array);
+char	*tt_wildcard(char *arg, t_cdll *node, t_shell *shell);
+int		tt_is_match(char *pattern, char *filename);
 
 // error
 void	error_execve(char *cmd);
@@ -228,5 +257,15 @@ int		redir_out(t_cdll *node, t_shell *shell);
 char	**exec_args(t_cdll *node, t_shell *shell);
 char	*exec_filename(t_cdll *node, t_shell *shell);
 int		exec_cmd(t_cdll *node, t_shell *shell);
+int		exec_tree(t_tree *tree_node, t_shell *shell);
+int		exec_execve(char *cmd, char **args, char **envp, t_shell *shell);
+int		exec_leaf(t_cdll *node, t_shell *shell);
+
+// utils
+int		is_valid_var_name(char *str);
+char	*prompt(t_shell *shell);
+char	*cut_var_name(char *str);
+char	**realloc_str_arr(char **tab, size_t new_size);
+void	exit_shell(t_shell *shell);
 
 #endif

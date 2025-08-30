@@ -54,6 +54,5 @@ void	sig_heredoc(void)
 
 void	sig_setup(void)
 {
-	g_signals = 0;
 	sig_set_signal(MAIN);
 }

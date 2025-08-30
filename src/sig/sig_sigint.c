@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   sig_handlers.c                                     :+:    :+:            */
+/*   sig_sigint.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
@@ -10,12 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#define _POSIX_C_SOURCE 200809L
 #include "../../include/minishell.h"
 
-/*
-** SIGINT handler for interactive prompt.
-*/
 void	sigint_prompt(int signum)
 {
 	(void)signum;
@@ -26,9 +22,6 @@ void	sigint_prompt(int signum)
 	rl_redisplay();
 }
 
-/*
-** SIGINT handler for heredoc child. Exits with 130.
-*/
 void	sigint_heredoc(int signum)
 {
 	(void)signum;

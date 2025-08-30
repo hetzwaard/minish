@@ -34,6 +34,7 @@ int	main(int argc, char **argv, char **envp)
 			continue ;
 		shell->tree = create_tree(*shell->head, (*shell->head)->prev->prev);
 		exec_tree(shell->tree, shell);
+		g_signals = 0;
 	}
 	ft_printf("exit\n");
 	exit_shell(shell);

@@ -51,7 +51,10 @@ static char	*tt_replace_status(char *str, char *dol_p, char **envp, int ex_stat)
 	if (!str || !envp)
 		return (NULL);
 	remainder = dol_p + 2;
-	value = ft_itoa(ex_stat);
+	if (g_signals != 0)
+		value = ft_itoa(130);
+	else
+		value = ft_itoa(ex_stat);
 	if (!value)
 		return (error_shell("tt_replace_status", "ft_itoa failed"), NULL);
 	str[dol_p - str] = '\0';

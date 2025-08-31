@@ -30,3 +30,10 @@ void	free_shell(t_shell *shell)
 	free(shell);
 	shell = NULL;
 }
+
+void	exit_shell(t_shell *shell)
+{
+	rl_clear_history();
+	unlink(TEMP_FILE);
+	free_shell(shell);
+}

@@ -263,6 +263,7 @@ int		exec_leaf(t_cdll *node, t_shell *shell);
 
 // utils
 int		is_valid_var_name(char *str);
+int		is_blank(const char *s);
 char	*prompt(t_shell *shell);
 char	*cut_var_name(char *str);
 char	**realloc_str_arr(char **tab, size_t new_size);

@@ -27,6 +27,8 @@ int	main(int argc, char **argv, char **envp)
 		shell->input = readline(prompt(shell));
 		if (!shell->input)
 			break ;
+		if (is_blank(shell->input))
+			continue ;
 		if (shell->input[0])
 			add_history(shell->input);
 		init_input(shell);

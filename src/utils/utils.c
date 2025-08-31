@@ -92,9 +92,15 @@ char	**realloc_str_arr(char **tab, size_t new_size)
 	return (new_tab);
 }
 
-void	exit_shell(t_shell *shell)
+int	is_blank(const char *s)
 {
-	rl_clear_history();
-	unlink(TEMP_FILE);
-	free_shell(shell);
+	if (!s)
+		return (1);
+	while (*s)
+	{
+		if (!ft_isspace((unsigned char)*s))
+			return (0);
+		s++;
+	}
+	return (1);
 }

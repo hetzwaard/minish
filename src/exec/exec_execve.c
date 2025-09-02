@@ -36,7 +36,7 @@ static char	*exec_find_path_in_path(char *cmd, char **path_split)
 	return (NULL);
 }
 
-static char	*exec_find_exec_pathj(char *cmd, char **envp)
+static char	*exec_find_exec_path(char *cmd, char **envp)
 {
 	char	*path;
 	char	**path_split;
@@ -93,7 +93,7 @@ int	exec_execve(char *cmd, char **args, char **envp, t_shell *shell)
 					"No such file or directory"), -1);
 	}
 	else
-		path = exec_find_exec_pathj(cmd, envp);
+		path = exec_find_exec_path(cmd, envp);
 	if (!path)
 		return (error_execve(cmd), 127);
 	if (access(path, X_OK))

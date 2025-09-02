@@ -38,7 +38,7 @@ static int	heredoc_file(t_delim *delim, t_shell *shell)
 		return (error_perror("heredoc_file", "open failed"));
 	while (++n_line)
 	{
-		line = readline(RED "> " RESET);
+		line = readline(RED "🍀 > " RESET);
 		if (!line)
 		{
 			error_warning(delim->str, n_line);

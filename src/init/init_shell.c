@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 19:49:32 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 10:16:08 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/02 23:27:15 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ static int	init_shlvl(char ***envp)
 	return (0);
 }
 
-t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp)
+t_shell	*init_shell(t_shell *shell, int argc, char **argv, char **envp)
 {
-	(void)ac;
-	(void)av;
+	(void)argc;
+	(void)argv;
 	shell = (t_shell *) malloc(sizeof(t_shell));
 	if (!shell)
 	{

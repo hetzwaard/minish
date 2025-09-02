@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror
 INCLUDES = -Iinclude -Iinclude/libft/include
 LIBS = -Linclude/libft -lft
 

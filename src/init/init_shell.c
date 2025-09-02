@@ -12,12 +12,12 @@
 
 #include "../../include/minishell.h"
 
-void	init_input(t_shell *gen)
+void	init_input(t_shell *shell)
 {
-	gen->in_start = gen->input;
-	gen->in_end = gen->input + ft_strlen(gen->input);
-	gen->input_cpy = ft_strdup(gen->input);
-	gen->head = lexer_tokenize(gen->input);
+	shell->in_start = shell->input;
+	shell->in_end = shell->input + ft_strlen(shell->input);
+	shell->input_cpy = ft_strdup(shell->input);
+	shell->head = lexer_tokenize(shell->input);
 }
 
 static void	init_home(t_shell *shell)

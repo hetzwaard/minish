@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 05:54:25 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 10:32:42 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/02 12:05:00 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,20 @@ static int	exec_save_std(t_shell *shell)
 int	exec_leaf(t_cdll *node, t_shell *shell)
 {
 	int	status;
+	int	hd_status;
 
 	if (exec_save_std(shell) == -1)
 		return (-1);
 	if (!shell->in_pipe)
-		init_heredoc(node, shell);
+	{
+		hd_status = init_heredoc(node, shell);
+		if (hd_status != 0)
+		{
+			close(shell->stdin_backup);
+			close(shell->stdout_backup);
+			return (hd_status);
+		}
+	}
 	if (exec_redir(node, shell))
 		return (1);
 	status = exec_cmd(cdll_next_cmd(node), shell);

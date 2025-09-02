@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 06:04:16 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/30 12:23:55 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/02 12:06:30 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,18 +126,17 @@ int	init_heredoc(t_cdll *node, t_shell *shell)
 	sig_set_signal(PARENT);
 	if (waitpid(pid, &status, 0) == -1)
 	{
-		if (errno == EINTR)
-		{
-			sig_set_signal(MAIN);
-			return (130);
-		}
 		sig_set_signal(MAIN);
+		if (errno == EINTR)
+			return (130);
 		return (error_perror("init_heredoc", "waitpid failed"));
 	}
 	sig_set_signal(MAIN);
 	if (WIFSIGNALED(status))
 		return (128 + WTERMSIG(status));
-	if (WIFEXITED(status) && WEXITSTATUS(status) == -1)
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 255)
 		return (-1);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (0);
 }

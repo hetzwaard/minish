@@ -67,7 +67,7 @@ int	cd_cmd(char **args, char ***envp, t_shell *shell)
 	path = args[1];
 	new_pwd = cd_get_path(path, *envp, get_env_value("HOME", *envp), old);
 	if (!new_pwd)
-		return (-1);
+		return (1);
 	if (chdir(new_pwd) == -1)
 		return (free(new_pwd), error_perror("cd", args[1]));
 	free(new_pwd);

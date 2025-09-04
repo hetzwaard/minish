@@ -21,13 +21,11 @@ static int	pipex_write(int fd[], t_tree *tree, t_shell *shell)
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
 		close(fd[1]);
-		free_shell(shell);
 		error_perror("pipex_write", "dup2 failed");
-		exit(42);
+		exit (EXIT_FAILURE);
 	}
 	close(fd[1]);
 	status = exec_tree(tree->left, shell);
-	free_shell(shell);
 	exit(status);
 }
 
@@ -40,13 +38,11 @@ static int	pipex_read(int fd[], t_tree *tree, t_shell *shell)
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
 		close(fd[0]);
-		free_shell(shell);
 		error_perror("pipex_read", "dup2 failed");
-		exit(42);
+		exit(EXIT_FAILURE);
 	}
 	close(fd[0]);
 	status = exec_tree(tree->right, shell);
-	free_shell(shell);
 	exit(status);
 }
 

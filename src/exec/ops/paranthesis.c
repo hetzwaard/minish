@@ -61,8 +61,7 @@ int	parenthesis(t_tree *tree, t_shell *shell)
 		head = lexer_tokenize(((t_token *) tree->list_node->data)->start);
 		status = parenthesis_subshell(head, shell);
 		cdll_clear(head);
-		free_shell(shell);
-		exit(status);
+		exit_shell(shell, status);
 	}
 	if (waitpid(pid, &status, 0) == -1)
 		return (error_perror("parenthesis", "waitpid failed"), -1);

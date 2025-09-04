@@ -14,7 +14,6 @@
 
 void	free_shell(t_shell *shell)
 {
-	rl_clear_history();
 	if (!shell)
 		return ;
 	if (shell->envp)
@@ -28,12 +27,12 @@ void	free_shell(t_shell *shell)
 	shell->pwd = NULL;
 	shell->home = NULL;
 	free(shell);
-	shell = NULL;
 }
 
-void	exit_shell(t_shell *shell)
+void	exit_shell(t_shell *shell, int status)
 {
 	rl_clear_history();
 	unlink(TEMP_FILE);
 	free_shell(shell);
+	exit (status);
 }

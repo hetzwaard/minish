@@ -25,8 +25,7 @@ static int	exit_argslen(char **args)
 static void	exit_perform(char **args, t_shell *shell, int status)
 {
 	free_str_tab(args);
-	free_shell(shell);
-	exit(status);
+	exit_shell(shell, status);
 }
 
 void	exit_cmd(char **args, char **envp, t_shell *shell)

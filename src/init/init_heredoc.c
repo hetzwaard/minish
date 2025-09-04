@@ -98,19 +98,12 @@ static void	heredoc_child(t_cdll *node, t_shell *shell)
 			break ;
 		delimiter = heredoc_find_delimiter(current);
 		if (!delimiter)
-		{
-			free_shell(shell);
-			exit(-1);
-		}
+			exit_shell(shell, -1);
 		if (heredoc_file(delimiter, shell))
-		{
-			free_shell(shell);
-			exit(-1);
-		}
+			exit_shell(shell, -1);
 		current = cdll_next_heredoc(current->next);
 	}
-	free_shell(shell);
-	exit(0);
+	exit_shell(shell, 0);
 }
 
 int	init_heredoc(t_cdll *node, t_shell *shell)

@@ -39,6 +39,5 @@ int	main(int argc, char **argv, char **envp)
 		g_signals = 0;
 	}
 	ft_printf("exit\n");
-	exit_shell(shell);
-	return (0);
+	exit_shell(shell, 0);
 }

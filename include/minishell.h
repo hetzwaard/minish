@@ -267,6 +267,6 @@ int		is_blank(const char *s);
 char	*prompt(t_shell *shell);
 char	*cut_var_name(char *str);
 char	**realloc_str_arr(char **tab, size_t new_size);
-void	exit_shell(t_shell *shell);
+void	exit_shell(t_shell *shell, int status);
 
 #endif

@@ -29,10 +29,20 @@ static void	init_home(t_shell *shell)
 	{
 		shell->home = ft_strdup(home);
 		if (!shell->home)
+		{
 			error_shell("init_home", "ft_strdup failed");
+			exit_shell(shell, 1);
+		}
 	}
 	else
+	{
 		shell->home = ft_strdup(shell->pwd);
+		if (!shell->home)
+		{
+			error_shell("init_home", "ft_strdup failed");
+			exit_shell(shell, 1);
+		}
+	}
 }
 
 static void	init_pwd(t_shell *shell)
@@ -46,8 +56,7 @@ static void	init_pwd(t_shell *shell)
 	if (!shell->pwd)
 	{
 		error_shell("init_pwd", "ft_strdup failed");
-		free_shell(shell);
-		exit (1);
+		exit_shell(shell, 1);
 	}
 }
 
@@ -64,7 +73,7 @@ static int	init_shlvl(char ***envp)
 		i = ft_atoi(shlvl);
 	new_shlvl = ft_itoa(i + 1);
 	if (!new_shlvl)
-		return (error_shell("change_shlvl", "ft_itoa failed"));
+		return (error_shell("init_shlvl", "ft_itoa failed"));
 	env_update("SHLVL", '=', new_shlvl, envp);
 	free(new_shlvl);
 	return (0);
@@ -74,21 +83,20 @@ t_shell	*init_shell(t_shell *shell, int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	shell = (t_shell *) malloc(sizeof(t_shell));
+	shell = ft_calloc(1, sizeof(t_shell));
 	if (!shell)
 	{
-		error_shell("init_shell", "malloc failed");
-		exit (1);
+		error_shell("init_shell", "calloc failed");
+		exit_shell(shell, 1);
 	}
-	ft_memset(shell, 0, sizeof(t_shell));
 	shell->envp = env_copy(envp);
 	if (!shell->envp)
 	{
 		error_shell("init_shell", "failed to copy envp");
-		free_shell(shell);
-		exit (1);
+		exit_shell(shell, 1);
 	}
-	init_shlvl(&shell->envp);
+	if (init_shlvl(&shell->envp))
+		exit_shell(shell, 1);
 	init_pwd(shell);
 	init_home(shell);
 	return (shell);

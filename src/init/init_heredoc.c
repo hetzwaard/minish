@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 06:04:16 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/09/02 12:06:30 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/05 20:18:37 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	heredoc_file(t_delim *delim, t_shell *shell)
 		return (error_perror("heredoc_file", "open failed"));
 	while (++n_line)
 	{
-		line = readline(Y "✍️  > " RESET);
+		line = readline(CLOVER "☘️  > " RESET);
 		if (!line)
 		{
 			error_warning(delim->str, n_line);

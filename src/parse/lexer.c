@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/13 20:48:43 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/13 20:48:43 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/05 20:52:57 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ static int	lexer_fill_list(char *input, t_cdll **head)
 		type = parse_token(&str, input + ft_strlen(input), &start, &end);
 		if (type == TOKEN_ERROR)
 			return (-1);
-		token = malloc(sizeof(* token));
+		token = malloc(sizeof(*token));
 		if (!token)
 			return (-1);
 		lexer_set_token_fields(token, type, start, end);

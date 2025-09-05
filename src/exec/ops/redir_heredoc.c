@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 06:58:49 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 06:59:00 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/05 20:24:30 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	redir_heredoc(void)
 
 	fd = open(TEMP_FILE, O_RDONLY);
 	if (fd == -1)
-		return (error_perror("redir_heredoc", "open failed"));
+		return (0);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		return (close(fd), error_perror("redir_heredoc", "dup2 failed"));
 	close(fd);

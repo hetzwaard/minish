@@ -14,12 +14,12 @@
 
 void	free_cmd_line(t_shell *shell)
 {
+	if (!shell)
+		return ;
 	if (shell->stdin_backup)
 		close(shell->stdin_backup);
 	if (shell->stdout_backup)
 		close(shell->stdout_backup);
-	if (!shell)
-		return ;
 	if (shell->input)
 		free(shell->input);
 	if (shell->input_cpy)

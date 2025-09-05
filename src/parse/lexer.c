@@ -82,19 +82,19 @@ static void	lexer_set_token_fields(t_token *token, int type,
 static int	lexer_fill_list(char *input, t_cdll **head)
 {
 	t_token	*token;
-	char	*string;
+	char	*str;
 	char	*start;
 	char	*end;
 	int		type;
 
-	string = input;
+	str = input;
 	type = NOTHING;
 	while (type != TOKEN_EOF)
 	{
-		type = parse_token(&string, input + ft_strlen(input), &start, &end);
+		type = parse_token(&str, input + ft_strlen(input), &start, &end);
 		if (type == TOKEN_ERROR)
 			return (-1);
-		token = (t_token *) malloc(sizeof(t_token) + 1);
+		token = malloc(sizeof(* token));
 		if (!token)
 			return (-1);
 		lexer_set_token_fields(token, type, start, end);
@@ -109,10 +109,9 @@ t_cdll	**lexer_tokenize(char *input)
 
 	if (!input)
 		return (NULL);
-	head = (t_cdll **) malloc(sizeof(t_cdll *));
+	head = ft_calloc(1, sizeof(*head));
 	if (!head)
 		return (NULL);
-	ft_memset(head, 0, sizeof(t_cdll **));
 	if (lexer_fill_list(input, head) == -1)
 		return (cdll_clear(head), NULL);
 	lexer_set_priorities(head);

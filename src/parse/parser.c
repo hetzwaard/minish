@@ -34,6 +34,7 @@ static int	append_input(t_shell *shell, t_cdll *node)
 	shell->head = lexer_tokenize(shell->input);
 	if (!shell->head)
 		return (-1);
+	free(line);
 	return (parser(shell->head, shell, NO_PARENTHESIS));
 }
 

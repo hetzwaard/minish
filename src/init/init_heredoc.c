@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 06:04:16 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/09/05 20:18:37 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/08 13:15:13 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,12 @@ static void	heredoc_child(t_cdll *node, t_shell *shell)
 			break ;
 		delimiter = heredoc_find_delimiter(current);
 		if (!delimiter)
-			exit_shell(shell, -1);
+			exit_shell(shell, 255);
 		if (heredoc_file(delimiter, shell))
-			exit_shell(shell, -1);
+			exit_shell(shell, 255);
 		current = cdll_next_heredoc(current->next);
 	}
-	exit_shell(shell, 0);
+	exit(0);
 }
 
 int	init_heredoc(t_cdll *node, t_shell *shell)

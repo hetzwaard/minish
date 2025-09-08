@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 23:55:21 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/09/05 20:52:23 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/08 08:55:51 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	validate_nodes(t_cdll *current, t_shell *shell, int state)
 				&& !is_pipe(current->prev))
 				return (error_token((t_token *) current->data));
 			if (validate_parenthesis(shell, current))
-				return (258);
+				return (2);
 		}
 		current = current->next;
 		if (is_eof(current))
@@ -107,7 +107,12 @@ int	validate_nodes(t_cdll *current, t_shell *shell, int state)
 
 int	parser(t_cdll **head, t_shell *shell, int state)
 {
+	int	status;
+
 	if (!head || !*head)
-		return (258);
-	return (validate_nodes(*head, shell, state));
+		return (shell->exit_status = 2);
+	status = validate_nodes(*head, shell, state);
+	if (status != 0)
+		shell->exit_status = 2;
+	return (status);
 }

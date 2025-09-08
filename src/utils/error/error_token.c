@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/13 20:36:30 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/13 20:36:30 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/08 09:12:00 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,6 @@ int	error_token(t_token *token)
 {
 	ft_putstr_fd("minish: syntax error near unexpected token ", 2);
 	print_token(token);
-	ft_printf("\n");
-	return (258);
+	ft_putstr_fd("\n", 2);
+	return (2);
 }

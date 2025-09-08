@@ -116,20 +116,6 @@ int	init_heredoc(t_cdll *node, t_shell *shell)
 		return (error_perror("init_heredoc", "fork failed"));
 	if (pid == 0)
 		heredoc_child(node, shell);
-	sig_set_signal(PARENT);
-	if (waitpid(pid, &status, 0) == -1)
-	{
-		sig_set_signal(MAIN);
-		if (errno == EINTR)
-			return (130);
-		return (error_perror("init_heredoc", "waitpid failed"));
-	}
-	sig_set_signal(MAIN);
-	if (WIFSIGNALED(status))
-		return (128 + WTERMSIG(status));
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 255)
-		return (-1);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
-	return (0);
+	status = sig_heredoc(pid);
+	return (status);
 }

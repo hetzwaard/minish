@@ -157,7 +157,7 @@ t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp);
 void	sigint_prompt(int signum);
 void	sigint_heredoc(int signum);
 void	sig_set_signal(int mode);
-void	sig_heredoc(void);
+int		sig_heredoc(pid_t pid);
 void	sig_setup(void);
 int		sig_pipex(int left_pid, int right_pid);
 void	sig_child(void);

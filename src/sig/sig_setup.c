@@ -47,11 +47,6 @@ void	sig_set_signal(int mode)
 		sig_set_signal_inner(mode);
 }
 
-void	sig_heredoc(void)
-{
-	sig_set_signal(HEREDOC);
-}
-
 void	sig_setup(void)
 {
 	sig_set_signal(MAIN);

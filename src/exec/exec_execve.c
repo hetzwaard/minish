@@ -11,12 +11,13 @@
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+#include <sys/stat.h>
 
 static char	*exec_find_path_in_path(char *cmd, char **path_split)
 {
 	int		i;
-	char	*exec_path;
 	char	*tmp;
+	char	*exec_path;
 
 	i = 0;
 	while (path_split[i])
@@ -78,8 +79,9 @@ static int	exec_execve_cmd(char *path, char **args, t_shell *shell)
 
 int	exec_execve(char *cmd, char **args, char **envp, t_shell *shell)
 {
-	char	*path;
-	int		ret;
+	char		*path;
+	int			ret;
+	struct stat	st;
 
 	if (!cmd || !args || !envp)
 		return (error_shell("exec_execve", "invalid arguments"));
@@ -89,16 +91,17 @@ int	exec_execve(char *cmd, char **args, char **envp, t_shell *shell)
 		if (!path)
 			return (error_shell(cmd, "ft_strdup failed"));
 		if (access(path, F_OK))
-			return (free(path), error_shell(cmd,
-					"No such file or directory"), -1);
+			return (free(path), error_shell(cmd, "No such file or directory"),
+				-1);
 	}
 	else
 		path = exec_find_exec_path(cmd, envp);
 	if (!path)
 		return (error_execve(cmd), 127);
+	if (stat(path, &st) == 0 && S_ISDIR(st.st_mode))
+		return (free(path), error_execve(cmd), 127);
 	if (access(path, X_OK))
 		return (free(path), error_shell(cmd, "permission denied"), 127);
 	ret = exec_execve_cmd(path, args, shell);
-	free(path);
-	return (ret);
+	return (free(path), ret);
 }

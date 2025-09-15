@@ -1,6 +1,6 @@
 # Compiler and flags
 CC = cc
-CFLAGS = -Wall -Wextra -Werror #-g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 INCLUDES = -Iinclude -Iinclude/libft/include
 LIBS = -Linclude/libft -lft
 

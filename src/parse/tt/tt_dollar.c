@@ -12,66 +12,26 @@
 
 #include "../../../include/minishell.h"
 
-static char	*tt_replace_var(char *str, char *dol_p, char **envp)
+static char	*tt_process_dollar(char *res, char *ptr, t_shell *shell)
 {
-	char			*var;
-	char			*value;
-	char			*rest;
-	char			*temp_str;
-	char			*new_str;
+	char	*str;
+	char	*new_res;
 
-	if (!str || !envp)
-		return (NULL);
-	rest = get_var_name_end(dol_p + 1);
-	var = ft_substr(str, dol_p - str + 1, (rest - str - (dol_p - str)) - 1);
-	if (!var)
-		return (error_shell("tt_replace_var", "ft_strdup failed"), NULL);
-	value = get_env_value(var, envp);
-	if (!value)
-		value = "";
-	free(var);
-	str[dol_p - str] = '\0';
-	temp_str = ft_strjoin(str, value);
-	if (!temp_str)
-		return (error_shell("tt_replace_var", "ft_strjoin failed"), NULL);
-	new_str = ft_strjoin(temp_str, rest);
-	free(temp_str);
-	if (!new_str)
-		return (error_shell("tt_replace_var", "ft_strjoin failed"), NULL);
-	return (new_str);
-}
-
-static char	*tt_replace_status(char *str, char *dol_p, char **envp, int ex_stat)
-{
-	char	*value;
-	char	*remainder;
-	char	*temp_str;
-	char	*new_str;
-
-	if (!str || !envp)
-		return (NULL);
-	remainder = dol_p + 2;
-	if (g_signals != 0)
-		value = ft_itoa(130);
+	str = res;
+	if (*(ptr + 1) == '$')
+		new_res = tt_replace_pid(str, ptr);
+	else if (*(ptr + 1) == '?')
+		new_res = tt_replace_status(str, ptr, shell->envp, shell->exit_status);
 	else
-		value = ft_itoa(ex_stat);
-	if (!value)
-		return (error_shell("tt_replace_status", "ft_itoa failed"), NULL);
-	str[dol_p - str] = '\0';
-	temp_str = ft_strjoin(str, value);
-	free(value);
-	if (!temp_str)
-		return (error_shell("tt_replace_status", "ft_strjoin failed"), NULL);
-	new_str = ft_strjoin(temp_str, remainder);
-	free(temp_str);
-	if (!new_str)
-		return (error_shell("tt_replace_status", "ft_strjoin failed"), NULL);
-	return (new_str);
+		new_res = tt_replace_var(str, ptr, shell->envp);
+	free(str);
+	return (new_res);
 }
 
-static char	*tt_replace_loop(char *res, char *ptr, char *str, t_shell *shell)
+static char	*tt_replace_loop(char *res, char *ptr, t_shell *shell)
 {
 	int	i;
+	int	pos;
 
 	i = 0;
 	while (1)
@@ -81,19 +41,14 @@ static char	*tt_replace_loop(char *res, char *ptr, char *str, t_shell *shell)
 			break ;
 		if (*(ptr + 1) == '.')
 		{
-			i++;
+			i = (ptr - res) + 1;
 			continue ;
 		}
-		str = res;
-		if (*(ptr + 1) == '?')
-			res = tt_replace_status(str, ptr, shell->envp, shell->exit_status);
-		else
-			res = tt_replace_var(str, ptr, shell->envp);
-		free(str);
-		if (ft_strchr(res, '$'))
-			return (res);
+		pos = ptr - res;
+		res = tt_process_dollar(res, ptr, shell);
 		if (!res)
 			return (NULL);
+		i = pos + 1;
 	}
 	return (res);
 }
@@ -115,10 +70,9 @@ char	*tt_expand(char *str, t_shell *shell)
 		res = ft_strjoin(shell->home, ptr + 1);
 		free(ptr);
 		if (!res)
-			return (error_shell("tt_expand",
-					"ft_strjoin failed"), NULL);
+			return (error_shell("tt_expand", "ft_strjoin failed"), NULL);
 	}
-	return (tt_replace_loop(res, ptr, str, shell));
+	return (tt_replace_loop(res, ptr, shell));
 }
 
 char	*tt_dollar(t_token *token, t_shell *shell)

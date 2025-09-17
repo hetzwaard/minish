@@ -78,6 +78,8 @@ int	env_update(const char *key, char sep, const char *value, char ***envp)
 	var = get_env_var_ptr(key, *envp);
 	if (!var)
 		return (env_create(key, sep, value, envp));
+	if (sep == ' ')
+		return (0);
 	temp = ft_strjoin(key, "=");
 	if (!temp)
 		return (error_shell("env_update", "strjoin failed"));

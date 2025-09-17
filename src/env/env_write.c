@@ -102,7 +102,7 @@ char	**env_copy(char **envp)
 	if (!envp)
 		return (error_shell("env_copy", "invalid arguemnts"), NULL);
 	size = get_env_count(envp);
-	new_envp = (char **) malloc(sizeof(char *) * (size + 1));
+	new_envp = malloc(sizeof(char *) * (size + 1));
 	if (!new_envp)
 		return (error_shell("env_copy", "malloc fialed"), NULL);
 	i = 0;

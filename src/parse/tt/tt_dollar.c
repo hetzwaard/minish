@@ -18,9 +18,7 @@ static char	*tt_process_dollar(char *res, char *ptr, t_shell *shell)
 	char	*new_res;
 
 	str = res;
-	if (*(ptr + 1) == '$')
-		new_res = tt_replace_pid(str, ptr);
-	else if (*(ptr + 1) == '?')
+	if (*(ptr + 1) == '?')
 		new_res = tt_replace_status(str, ptr, shell->envp, shell->exit_status);
 	else
 		new_res = tt_replace_var(str, ptr, shell->envp);

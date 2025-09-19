@@ -195,7 +195,6 @@ int		is_redir_out(t_cdll *node);
 char	**tt_dirlist(char *path, int mode);
 char	*tt_expand(char *str, t_shell *shell);
 char	*tt_dollar(t_token *token, t_shell *shell);
-char	*tt_replace_pid(char *str, char *dol_p);
 char	*tt_replace_status(char *str, char *dol_p, char **envp, int ex_stat);
 char	*tt_replace_var(char *str, char *dol_p, char **envp);
 char	**tt_filenames(char *arg, char **file_array);

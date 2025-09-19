@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   tt_pid.c                                           :+:    :+:            */
+/*   tt_replace.c                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
@@ -11,33 +11,6 @@
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
-
-char	*tt_replace_pid(char *str, char *dol_p)
-{
-	char	*value;
-	char	*remainder;
-	char	*temp_str;
-	char	*new_str;
-	pid_t	pid;
-
-	if (!str)
-		return (NULL);
-	remainder = dol_p + 2;
-	pid = getpid();
-	value = ft_itoa(pid);
-	if (!value)
-		return (error_shell("tt_replace_pid", "ft_itoa failed"), NULL);
-	str[dol_p - str] = '\0';
-	temp_str = ft_strjoin(str, value);
-	free(value);
-	if (!temp_str)
-		return (error_shell("tt_replace_pid", "ft_strjoin failed"), NULL);
-	new_str = ft_strjoin(temp_str, remainder);
-	free(temp_str);
-	if (!new_str)
-		return (error_shell("tt_replace_pid", "ft_strjoin failed"), NULL);
-	return (new_str);
-}
 
 char	*tt_replace_status(char *str, char *dol_p, char **envp, int ex_stat)
 {

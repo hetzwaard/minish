@@ -129,18 +129,6 @@ EOF
 - Consecutive expansions merged with surrounding literals
 
 ---
-## Heredoc Notes
-- Temporary in-memory / file strategy (see heredoc module)
-- SIGINT during heredoc aborts only that heredoc, not whole shell session
-
----
-## Limitations / Future Ideas
-- No job control (fg/bg, &)
-- No advanced glob patterns (`?`, `[]`)
-- No command history persistence file
-- Potential enhancement: caching PATH lookups, adding tests harness
-
----
 ## Development Utilities
 `libft` provides custom implementations of common libc helpers plus formatted output (`ft_printf`) and memory/string utilities.
 

@@ -138,7 +138,7 @@ Internal educational project; external PRs not expected. Fork if you want to exp
 
 ---
 ## Credits
-Created as part of a shell programming exercise. Name inspired by *The Minish Cap* (Nintendo / The Legend of Zelda). Bonus features implemented (parentheses, wildcard expansion, robust heredoc behavior).
+Created as part of a shell programming exercise. Name inspired by *The Minish Cap* (The Legend of Zelda).
 
 ---
 Enjoy exploring Minish! 🍀

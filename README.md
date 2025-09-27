@@ -1,10 +1,8 @@
-# Minish
+# MINISH 🍀
 
-### Minimal UNIX Shell (with bonus features)
+### Mini UNIX Shell
 
 Minish is a small UNIX-like shell written in C. It implements a command-line interpreter with parsing, execution, environment variable management, redirections, pipes, heredocs, wildcard expansion, and robust signal/error handling. Designed as a learning project, it focuses on clean modular architecture and safe memory management.
-
-Fun fact: The name "Minish" is inspired by the tiny folk from *The Legend of Zelda: The Minish Cap*.
 
 ---
 ## Features
@@ -43,11 +41,11 @@ Fun fact: The name "Minish" is inspired by the tiny folk from *The Legend of Zel
 include/            Public headers (main: minishell.h)
 include/libft/      Custom libc-like helper library (libft)
 src/
-  parse/            Lexer, tokenization, tree builder, wildcard & dollar tools
-  exec/             Execution engine, builtins, redirections, pipes, subshell
   cdll/             Circular doubly linked list utilities (token / node mgmt)
   env/              Environment read/write helpers
+  exec/             Execution engine, builtins, redirections, pipes, subshell
   init/             Shell + heredoc initialization
+  parse/            Lexer, tokenization, tree builder, wildcard & dollar tools
   sig/              Signal handling layers (shell, heredoc, exec, pipex)
   utils/            Common helpers, error & free modules
 ```
@@ -111,17 +109,17 @@ make fclean
 ```
 Examples:
 ```
-minish$ echo hello world
+🍀 MINISH > echo hello world
 hello world
-minish$ export PATH="$PWD/bin:$PATH"
-minish$ cat <<EOF | grep foo > out.txt
+🍀 MINISH > export PATH="$PWD/bin:$PATH"
+🍀 MINISH > cat <<EOF | grep foo > out.txt
 foo bar
 baz
 foo qux
 EOF
-minish$ (echo inside && echo group) | wc -l
+🍀 MINISH > (echo inside && echo group) | wc -l
 2
-minish$ ls *.c | wc -l
+🍀 MINISH > ls *.c | wc -l
 ```
 
 ---
@@ -151,12 +149,8 @@ minish$ ls *.c | wc -l
 Internal educational project; external PRs not expected. Fork if you want to experiment.
 
 ---
-## License
-Not explicitly licensed; treat as educational reference unless a LICENSE file is added.
-
----
 ## Credits
 Created as part of a shell programming exercise. Name inspired by *The Minish Cap* (Nintendo / The Legend of Zelda). Bonus features implemented (parentheses, wildcard expansion, robust heredoc behavior).
 
 ---
-Enjoy exploring Minish!
+Enjoy exploring Minish! 🍀

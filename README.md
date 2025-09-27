@@ -2,12 +2,12 @@
 
 ### Mini UNIX Shell
 
-Minish is a small UNIX-like shell written in C. It implements a command-line interpreter with parsing, execution, environment variable management, redirections, pipes, heredocs, wildcard expansion, and robust signal/error handling. It focuses on clean modular architecture and safe memory management.
+Minish is a small shell written in C for the 42 curriculum (team project). It runs a prompt, parses what you type, and executes commands with pipes, redirections, variables, wildcards, and heredocs. The goal: learn how a shell really works while keeping the code readable and safe.
 
 ---
 ## Features
-- Command prompt with interactive loop and proper exit status propagation
-- Lexer + parser building an AST / execution tree
+- Prompt loop with correct exit codes
+- Lexer + parser building a simple execution tree
 - Builtins:
   - `echo` (with -n)
   - `cd` (relative / absolute / `~` / `-`)
@@ -15,25 +15,25 @@ Minish is a small UNIX-like shell written in C. It implements a command-line int
   - `export` / `unset`
   - `env`
   - `exit`
-- External command execution via `execve`
-- PATH resolution + relative/absolute execution
+- External commands via `execve`
+- PATH lookup + direct path execution
 - Redirections: `<`, `>`, `>>`, heredoc `<<`
-- Pipes: arbitrary length pipelines
+- Pipes (any length)
 - Parentheses / subshell grouping (bonus)
-- Environment variable expansion: `$VAR`, `$?`
-- Wildcard expansion (`*`) (bonus)
-- Quote handling: single vs double quote semantics
-- Heredoc with signal-safe behavior and delimiter management
-- Signal handling: `SIGINT`, `SIGQUIT` behavior aligned with bash-like UX
-- Graceful error reporting with categorized messages
-- Defensive memory management + full cleanup paths
+- Variable expansion: `$VAR`, `$?`
+- Wildcards (`*`) (bonus)
+- Proper quote rules (single vs double)
+- Safe heredoc handling (own signal mode)
+- Clean signal behavior (Ctrl+C, Ctrl+\, Ctrl+D)
+- Clear error messages
+- Careful memory cleanup
 
 ---
 ## Bonus Implemented
-- Parentheses for grouped command execution
-- Wildcard (globbing) expansion
-- Advanced variable replacement logic (dollar parsing module)
-- Robust heredoc handling with dedicated signal mode
+- Parentheses (grouped commands)
+- Wildcard expansion
+- Smarter variable replacement
+- Strong heredoc handling
 
 ---
 ## Architecture Overview
@@ -49,38 +49,59 @@ src/
   sig/              Signal handling layers (shell, heredoc, exec, pipex)
   utils/            Common helpers, error & free modules
 ```
-Core flow:
+Flow:
 1. Read line (readline)
-2. Lex into tokens (respecting quotes, operators)
-3. Expand (env vars, wildcards, heredocs pre-processing)
-4. Build execution tree / nodes
-5. Execute recursively (pipelines, redirs, subshells, builtins)
-6. Cleanup + loop
+2. Lex into tokens
+3. Expand (vars, wildcards, heredocs)
+4. Build nodes / tree
+5. Execute (pipes, redirs, subshells, builtins)
+6. Free stuff, loop again
 
 ---
 ## Key Modules
-- Parsing (`parse/lexer.c`, `parse/token/*`, `parse/tt/*`): token kinds, redirection specs, wildcard & dollar expansion, directory listing
-- Execution (`exec/`): argument vector build, filename resolution, builtins dispatch, pipeline + redirection orchestration
-- Redirections (`exec/ops/redir_*.c`): input, output, append, heredoc temp handling
-- Heredoc (`cdll/cdll_heredoc.c`, `init/init_heredoc.c`): delimiter management + SIGINT isolation
-- Signals (`sig/`): context-specific handlers (interactive vs child vs heredoc)
-- Environment (`env/`): synchronized copy of `envp` with export formatting
-- Memory cleanup (`utils/free/*`): structured destruction (tree, tokens, arrays)
-- Errors (`utils/error/*`): categorized error messages (syntax, open, exec, quote, parenthesis)
+- Parsing: tokens, wildcards, `$VAR` handling, tree build
+- Execution: argv build, path search, builtins, redirs, pipes, subshell
+- Redirections: open/dup logic (`redir_*` files)
+- Heredoc: delimiter + temporary storage + signals
+- Signals: different modes (prompt / child / heredoc)
+- Environment: internal copy you can modify
+- Freeing: every allocation has a matching cleanup path
+- Errors: grouped helpers for consistent output
 
 ---
-## Error Handling Philosophy
-- Syntax errors detected early (unclosed quotes, invalid parenthesis, unexpected token)
-- Execution errors report via `perror` variant + custom wrappers
-- Exit status follows POSIX where practical (`127` command not found, `126` permission, signal codes 128+n)
+## Error Handling
+We try to fail early and clearly.
+
+Examples:
+```
+🚧 MINISH > echo "
+syntax error: unclosed quote
+
+🚧 MINISH > ls no_such_file
+ls: cannot access 'no_such_file': No such file or directory
+
+🚧 MINISH > nosuchcommand
+nosuchcommand: command not found
+
+🚧 MINISH > ./script.sh
+./script.sh: Permission denied
+```
+Rules of thumb:
+- Detect syntax issues before execution (quotes, parentheses, unexpected tokens)
+- `127` = command not found, `126` = cannot execute, `128 + n` = signal n
+- Use our own wrappers for consistent formatting
 
 ---
 ## Signals
-| Context    | SIGINT (Ctrl+C)           | SIGQUIT (Ctrl+\) |
-|------------|---------------------------|------------------|
-| Prompt     | Aborts current line, NL   | Ignored          |
-| Child proc | Default (interrupt)       | Default          |
-| Heredoc    | Cancels heredoc, cleanup  | Ignored          |
+Behavior aims to feel familiar if you use bash.
+
+| Context    | Ctrl+C (SIGINT)           | Ctrl+\ (SIGQUIT) | Ctrl+D (EOF)                    |
+|------------|---------------------------|------------------|---------------------------------|
+| Prompt     | Cancel current line       | Ignored          | Exit shell if line is empty     |
+| Child proc | Interrupt program         | Quit if app reacts| N/A (read by parent readline)  |
+| Heredoc    | Abort current heredoc     | Ignored          | Ends heredoc if line == delim   |
+
+Ctrl+D does not send a signal; it's an EOF from the terminal. If the current input buffer is empty we exit cleanly (like bash). Inside heredoc, only the delimiter closes it—EOF acts like end-of-input if reached unexpectedly.
 
 ---
 ## Building
@@ -90,7 +111,7 @@ Prerequisites:
 
 Clone it:
 ```bash
-git clone https://github.com/hetzwaard/minish --recursive
+git clone https://github.com/hetzwaard/minish --recursive && cd minish
 ```
 Build:
 ```bash
@@ -115,34 +136,34 @@ Examples:
 ```
 🍀 MINISH > echo hello world
 hello world
+
 🍀 MINISH > export PATH="$PWD/bin:$PATH"
+
 🍀 MINISH > cat <<EOF | grep foo > out.txt
 foo bar
 baz
 foo qux
 EOF
+
 🍀 MINISH > (echo inside && echo group) | wc -l
 2
+
 🍀 MINISH > ls *.c | wc -l
 ```
 
 ---
 ## Wildcards & Expansion
-- `*` expands against current working directory (non-hidden) unless quoted
-- `$VAR` and `$?` expanded unless within single quotes
-- Consecutive expansions merged with surrounding literals
+- `*` expands to matching files (no dotfiles unless pattern starts with `.`)
+- `$VAR` and `$?` expand unless in single quotes
+- Text around expansions is joined naturally
 
 ---
 ## Development Utilities
-`libft` provides custom implementations of common libc helpers plus formatted output (`ft_printf`) and memory/string utilities.
-
----
-## Contributing
-Internal educational project; external PRs not expected. Fork if you want to experiment.
+`libft` is our small helper library (string, memory, list, printf-style funcs).
 
 ---
 ## Credits
-Created as part of a shell programming exercise. Name inspired by *The Minish Cap* (The Legend of Zelda).
+Built as a 42 school team project. Name inspired by the tiny folk in *The Legend of Zelda: The Minish Cap*.
 
 ---
 Enjoy exploring Minish! 🍀

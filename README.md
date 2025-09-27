@@ -2,7 +2,7 @@
 
 ### Mini UNIX Shell
 
-Minish is a small UNIX-like shell written in C. It implements a command-line interpreter with parsing, execution, environment variable management, redirections, pipes, heredocs, wildcard expansion, and robust signal/error handling. Designed as a learning project, it focuses on clean modular architecture and safe memory management.
+Minish is a small UNIX-like shell written in C. It implements a command-line interpreter with parsing, execution, environment variable management, redirections, pipes, heredocs, wildcard expansion, and robust signal/error handling. It focuses on clean modular architecture and safe memory management.
 
 ---
 ## Features

@@ -2,7 +2,7 @@
 
 ### Mini UNIX Shell
 
-Minish is a small shell written in C for the 42 curriculum (team project). It runs a prompt, parses what you type, and executes commands with pipes, redirections, variables, wildcards, and heredocs.
+Minish is a small shell written in C for the 42 curriculum (team project). It runs a prompt, parses the input, and executes commands with pipes, redirections, variables, wildcards, and heredocs.
 
 The goal: learn how a shell really works while keeping the code readable and safe.
 

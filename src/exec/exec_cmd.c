@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 08:44:27 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 09:48:19 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/27 10:53:28 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	exec_cmd(t_cdll *node, t_shell *shell)
 	if (!args)
 		return (0);
 	if (!ft_strncmp(args[0], "exit", 4) && ft_strlen(args[0]) == 4)
-		exit_cmd(args, shell->envp, shell);
+		status = exit_cmd(args, shell->envp, shell);
 	else if (!ft_strncmp(args[0], "cd", 2) && ft_strlen(args[0]) == 2)
 		status = cd_cmd(args, &shell->envp, shell);
 	else

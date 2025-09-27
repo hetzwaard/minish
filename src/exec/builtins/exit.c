@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.42.fr>            +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/14 08:49:42 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 10:32:09 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/27 10:59:30 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	exit_perform(char **args, t_shell *shell, int status)
 	exit_shell(shell, status);
 }
 
-void	exit_cmd(char **args, char **envp, t_shell *shell)
+int	exit_cmd(char **args, char **envp, t_shell *shell)
 {
 	long	exit_status;
 	char	*endptr;
@@ -45,8 +45,8 @@ void	exit_cmd(char **args, char **envp, t_shell *shell)
 	}
 	if (exit_argslen(args) > 2)
 	{
-		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		return ;
+		ft_putstr_fd("minish: exit: too many arguments\n", 2);
+		return (1);
 	}
-	exit_perform(args, shell, (exit_status) % 256);
+	return (exit_perform(args, shell, (exit_status) % 256), 0);
 }

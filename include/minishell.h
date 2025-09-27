@@ -6,7 +6,7 @@
 /*   By: mahkilic <mahkilic@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2025/08/08 18:32:20 by mahkilic      #+#    #+#                 */
-/*   Updated: 2025/08/14 14:12:05 by mahkilic      ########   odam.nl         */
+/*   Updated: 2025/09/27 10:58:27 by mahkilic      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,8 +138,37 @@ typedef enum e_tree_type
 	TREE_ERROR
 }		t_tree_type;
 
+// cdll
+t_cdll	*cdll_create_node(void *data);
+t_cdll	*cdll_next_heredoc(t_cdll *node);
+t_cdll	*cdll_next_cmd(t_cdll *node);
+t_cdll	*cdll_next_redir(t_cdll *node);
+t_cdll	*cdll_add_front(t_cdll **head, void *data);
+t_cdll	*cdll_add_back(t_cdll **head, void *data);
+void	cdll_remove_node(t_cdll **head, t_cdll *node);
+void	cdll_clear(t_cdll **head);
+int		cdll_swap_nodes(t_cdll **head, t_cdll *node1,
+			t_cdll *node2);
+void	cdll_move_node(t_cdll **src, t_cdll **dst, t_cdll *node);
+int		cdll_get_node_index(t_cdll *head, t_cdll *node);
+t_cdll	*cdll_get_node_at(t_cdll *head, int position);
+int		cdll_get_node_count(t_cdll *head);
+
+// env
+size_t	get_env_count(char **envp);
+char	**get_env_var_ptr(const char *var, char **envp);
+char	*get_env_value(const char *var, char **envp);
+int		cmp_env_keys(const char *s1, const char *s2);
+char	*get_var_name_end(char *ptr);
+char	**env_realloc(char ***envp, char *new_entry);
+int		env_create(const char *key, char sep, const char *value,
+			char ***envp);
+int		env_update(const char *key, char sep, const char *value,
+			char ***envp);
+char	**env_copy(char **envp);
+
 // builtins
-void	exit_cmd(char **args, char **envp, t_shell *shell);
+int		exit_cmd(char **args, char **envp, t_shell *shell);
 int		cd_cmd(char **args, char ***envp, t_shell *shell);
 int		echo_cmd(char **args, char **envp);
 int		env_cmd(char **args, char **envp);
@@ -148,22 +177,27 @@ int		pwd_cmd(char **args, char **envp);
 int		unset_cmd(char **args, char ***envp);
 int		unset_var(char *key, char ***envp);
 
+// ops
+int		parenthesis(t_tree *tree, t_shell *shell);
+int		pipex(t_tree *tree, t_shell *shell);
+int		redir_heredoc(void);
+int		redir_in(t_cdll *node, t_shell *shell);
+int		redir_out(t_cdll *node, t_shell *shell);
+
+// exec
+char	**exec_args(t_cdll *node, t_shell *shell);
+char	*exec_filename(t_cdll *node, t_shell *shell);
+int		exec_cmd(t_cdll *node, t_shell *shell);
+int		exec_tree(t_tree *tree_node, t_shell *shell);
+int		exec_execve(char *cmd, char **args, char **envp, t_shell *shell);
+int		exec_leaf(t_cdll *node, t_shell *shell);
+
 // init
 void	init_input(t_shell *gen);
 int		init_heredoc(t_cdll *node, t_shell *shell);
 t_shell	*init_shell(t_shell *shell, int ac, char **av, char **envp);
 
-// signals
-void	sigint_prompt(int signum);
-void	sigint_heredoc(int signum);
-void	sig_set_signal(int mode);
-int		sig_heredoc(pid_t pid);
-void	sig_setup(void);
-int		sig_pipex(int left_pid, int right_pid);
-void	sig_child(void);
-int		sig_execve(pid_t pid, char *ctx);
-
-// parser
+// parse
 t_cdll	**lexer_tokenize(char *input);
 t_tree	*create_tree(t_cdll *left, t_cdll *right);
 
@@ -201,6 +235,16 @@ char	**tt_filenames(char *arg, char **file_array);
 char	*tt_wildcard(char *arg, t_cdll *node, t_shell *shell);
 int		tt_is_match(char *pattern, char *filename);
 
+// signals
+void	sigint_prompt(int signum);
+void	sigint_heredoc(int signum);
+void	sig_set_signal(int mode);
+int		sig_heredoc(pid_t pid);
+void	sig_setup(void);
+int		sig_pipex(int left_pid, int right_pid);
+void	sig_child(void);
+int		sig_execve(pid_t pid, char *ctx);
+
 // error
 void	error_execve(char *cmd);
 void	error_exit(char *arg);
@@ -219,49 +263,6 @@ void	free_shell(t_shell *shell);
 void	free_str_tab(char **tab);
 void	free_strings(t_shell *shell);
 void	free_tree(t_tree *root);
-
-// env
-size_t	get_env_count(char **envp);
-char	**get_env_var_ptr(const char *var, char **envp);
-char	*get_env_value(const char *var, char **envp);
-int		cmp_env_keys(const char *s1, const char *s2);
-char	*get_var_name_end(char *ptr);
-char	**env_realloc(char ***envp, char *new_entry);
-int		env_create(const char *key, char sep, const char *value,
-			char ***envp);
-int		env_update(const char *key, char sep, const char *value,
-			char ***envp);
-char	**env_copy(char **envp);
-
-// cdll
-t_cdll	*cdll_create_node(void *data);
-t_cdll	*cdll_next_heredoc(t_cdll *node);
-t_cdll	*cdll_next_cmd(t_cdll *node);
-t_cdll	*cdll_next_redir(t_cdll *node);
-t_cdll	*cdll_add_front(t_cdll **head, void *data);
-t_cdll	*cdll_add_back(t_cdll **head, void *data);
-void	cdll_remove_node(t_cdll **head, t_cdll *node);
-void	cdll_clear(t_cdll **head);
-int		cdll_swap_nodes(t_cdll **head, t_cdll *node1,
-			t_cdll *node2);
-void	cdll_move_node(t_cdll **src, t_cdll **dst, t_cdll *node);
-int		cdll_get_node_index(t_cdll *head, t_cdll *node);
-t_cdll	*cdll_get_node_at(t_cdll *head, int position);
-int		cdll_get_node_count(t_cdll *head);
-
-// exec
-int		parenthesis(t_tree *tree, t_shell *shell);
-int		pipex(t_tree *tree, t_shell *shell);
-int		redir_heredoc(void);
-int		redir_in(t_cdll *node, t_shell *shell);
-int		redir_out(t_cdll *node, t_shell *shell);
-
-char	**exec_args(t_cdll *node, t_shell *shell);
-char	*exec_filename(t_cdll *node, t_shell *shell);
-int		exec_cmd(t_cdll *node, t_shell *shell);
-int		exec_tree(t_tree *tree_node, t_shell *shell);
-int		exec_execve(char *cmd, char **args, char **envp, t_shell *shell);
-int		exec_leaf(t_cdll *node, t_shell *shell);
 
 // utils
 int		is_valid_var_name(char *str);

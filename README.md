@@ -88,6 +88,10 @@ Prerequisites:
 - `make`, POSIX toolchain
 - `readline` development headers (e.g. on Debian/Ubuntu: `sudo apt install libreadline-dev`)
 
+Clone it:
+```bash
+git clone https://github.com/hetzwaard/minish --recursive
+```
 Build:
 ```bash
 make
